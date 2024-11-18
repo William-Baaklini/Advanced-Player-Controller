@@ -3,9 +3,13 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using static PlayerInputActions;
 
-[CreateAssetMenu(fileName = "InputReader", menuName = "Advanced Character Controller/Input/InputReader")]
-public class InputReader : ScriptableObject, IPlayerActions
-{
+public interface IInputReader {
+    Vector2 Direction { get; }
+    void EnablePlayerActions();
+}
+
+[CreateAssetMenu(fileName = "InputReader", menuName = "InputReader")]
+public class InputReader : ScriptableObject, IPlayerActions, IInputReader {
     public event UnityAction<Vector2> Move = delegate { };
     public event UnityAction<Vector2, bool> Look = delegate { };
     public event UnityAction EnableMouseControlCamera = delegate { };
@@ -13,19 +17,20 @@ public class InputReader : ScriptableObject, IPlayerActions
     public event UnityAction<bool> Jump = delegate { };
     public event UnityAction<bool> Dash = delegate { };
     public event UnityAction Attack = delegate { };
+    public event UnityAction<RaycastHit> Click = delegate { };
 
-    PlayerInputActions inputActions;
+    public PlayerInputActions inputActions;
+
+    public bool IsJumpKeyPressed() => inputActions.Player.Jump.IsPressed();
     
-    public Vector3 Direction => inputActions.Player.Move.ReadValue<Vector2>();
+    public Vector2 Direction => inputActions.Player.Move.ReadValue<Vector2>();
+    public Vector2 LookDirection => inputActions.Player.Look.ReadValue<Vector2>();
 
-    void OnEnable() {
+    public void EnablePlayerActions() {
         if (inputActions == null) {
             inputActions = new PlayerInputActions();
             inputActions.Player.SetCallbacks(this);
         }
-    }
-    
-    public void EnablePlayerActions() {
         inputActions.Enable();
     }
 
@@ -37,12 +42,20 @@ public class InputReader : ScriptableObject, IPlayerActions
         Look.Invoke(context.ReadValue<Vector2>(), IsDeviceMouse(context));
     }
 
-    bool IsDeviceMouse(InputAction.CallbackContext context) => context.control.device.name == "Mouse";
+    bool IsDeviceMouse(InputAction.CallbackContext context) {
+        // Debug.Log($"Device name: {context.control.device.name}");
+        return context.control.device.name == "Mouse";
+    }
 
     public void OnFire(InputAction.CallbackContext context) {
-        if (context.phase == InputActionPhase.Started) {
-            Attack.Invoke();
-        }
+        // if (context.phase == InputActionPhase.Started) {
+        //     if (IsDeviceMouse(context)) {
+        //         var ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        //         if (Physics.Raycast(ray.origin, ray.direction, out var hit, 100)) {
+        //             Click.Invoke(hit);
+        //         }
+        //     }
+        // }
     }
 
     public void OnMouseControlCamera(InputAction.CallbackContext context) {
