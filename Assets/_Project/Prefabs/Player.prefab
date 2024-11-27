@@ -46,8 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36135b61a26797342b52c39811bc3569, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upperVerticalLimit: 10
-  lowerVerticalLimit: 35
+  upperVerticalLimit: 50
+  lowerVerticalLimit: 50
   cameraSpeed: 50
   smoothCameraRotation: 0
   cameraSmoothingFactor: 25
@@ -262,7 +262,7 @@ MonoBehaviour:
   groundFriction: 100
   gravity: 30
   slideGravity: 5
-  slopeLimit: 30
+  slopeLimit: 60
   useLocalMomentum: 0
   cameraTransform: {fileID: 7218254422895511079}
 --- !u!114 &4202802198054131361

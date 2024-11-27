@@ -9,17 +9,21 @@ public class RaycastSensor
     public LayerMask LayerMask = 255;
     
     private Vector3 _origin = Vector3.zero;
-    private Transform _transform;
     
     public enum CastDirection { Forward, Right, Up, Backward, Left, Down }
-    private CastDirection _castDirection;
 
     private RaycastHit hitInfo;
+
+    private Transform _transform;
+    private CastDirection _castDirection;
 
     public RaycastSensor(Transform parentTransform)
     {
         _transform = parentTransform;
     }
+    
+    public void SetCastDirection(CastDirection direction) => _castDirection = direction;
+    public void SetCastOrigin(Vector3 pos) => _origin = _transform.InverseTransformPoint(pos);
 
     public void Cast()
     {
@@ -27,6 +31,7 @@ public class RaycastSensor
         Vector3 worldDirection = GetCastDirection();
 
         Physics.Raycast(worldOrigin, worldDirection, out hitInfo, castLength, LayerMask, QueryTriggerInteraction.Ignore);
+        Debug.DrawRay(worldOrigin, worldDirection, color: Color.red);
     }
 
     public bool HasDetectedHit() => hitInfo.collider != null;
@@ -35,10 +40,6 @@ public class RaycastSensor
     public Vector3 GetPosition() => hitInfo.point;
     public Collider GetCollider() => hitInfo.collider;
     public Transform GetTransform() => hitInfo.transform;
-    
-
-    public void SetCastDirection(CastDirection direction) => _castDirection = direction;
-    public void SetCastOrigin(Vector3 pos) => _origin = _transform.InverseTransformPoint(pos);
 
     Vector3 GetCastDirection()
     {
