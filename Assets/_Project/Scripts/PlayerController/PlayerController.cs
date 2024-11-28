@@ -52,7 +52,11 @@ public class PlayerController : MonoBehaviour {
         SetupStateMachine();
     }
 
-    void Start() {
+    void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        
         input.EnablePlayerActions();
         input.Jump += HandleJumpKeyInput;
     }

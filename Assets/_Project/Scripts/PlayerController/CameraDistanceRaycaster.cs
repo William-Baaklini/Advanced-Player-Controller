@@ -28,9 +28,7 @@ public class CameraDistanceRaycaster : MonoBehaviour {
 
     float GetCameraDistance(Vector3 castDirection) {
         float distance = castDirection.magnitude + minimumDistanceFromObstacles;
-        // if (Physics.Raycast(new Ray(tr.position, castDirection), out RaycastHit hit, distance, layerMask, QueryTriggerInteraction.Ignore)) {
-        //     return Mathf.Max(0f, hit.distance - minimumDistanceFromObstacles);
-        // }
+        
         float sphereRadius = 0.5f;
         if (Physics.SphereCast(new Ray(tr.position, castDirection), sphereRadius, out RaycastHit hit, distance, layerMask, QueryTriggerInteraction.Ignore)) {
             return Mathf.Max(0f, hit.distance - minimumDistanceFromObstacles);
