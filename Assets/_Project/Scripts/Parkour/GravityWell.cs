@@ -28,15 +28,7 @@ public class GravityWell : MonoBehaviour {
             RotateRigidbody(rb, directionToCenter);
         }
     }
-
-    void OnTriggerExit(Collider col) {
-        if (col.TryGetComponent(out Rigidbody rb)) {
-            RotateRigidbody(rb, Vector3.up);
-            var eulerAngles = rb.rotation.eulerAngles.With(x: 0f, z: 0f);
-            rb.MoveRotation(Quaternion.Euler(eulerAngles));
-        }
-    }
-
+    
     void RotateRigidbody(Rigidbody rb, Vector3 targetDirection) {
         targetDirection.Normalize();
 
@@ -44,5 +36,13 @@ public class GravityWell : MonoBehaviour {
         var finalRotation = rotationDifference * rb.transform.rotation;
 
         rb.MoveRotation(finalRotation);
+    }
+
+    void OnTriggerExit(Collider col) {
+        if (col.TryGetComponent(out Rigidbody rb)) {
+            RotateRigidbody(rb, Vector3.up);
+            var eulerAngles = rb.rotation.eulerAngles.With(x: 0f, z: 0f);
+            rb.MoveRotation(Quaternion.Euler(eulerAngles));
+        }
     }
 }
